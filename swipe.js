@@ -8,7 +8,7 @@ for (const list of lists) {
   handleStyle(list)
 
   // Get minimal swiped percent
-  const minSwipePercent = 40 // %
+  const minSwipePercent = 35 // %
   const minSwipeConfirm = minSwipePercent * list.clientWidth / 100
 
   //* Touch Event
@@ -71,16 +71,29 @@ function handleCancel(x, minSwipeConfirm, listElm) {
   const endX = x
   // Swipe back abortion
   if (swipeToRight(startX, endX)) {
-    if ((endX - startX) <= minSwipeConfirm) {
+    const isSwippedRight = (endX - startX) <= minSwipeConfirm
+    if (isSwippedRight) {
       listElm.children[0].style.marginRight = 0
       listElm.children[1].style.marginLeft = 0
-    } else alert('Swipped right!')
+      action.innerText = 'Cancel!' //? Debug
+    } else {
+      listElm.children[0].style.margin = '0'
+      listElm.children[1].style.margin = '0'
+      action.innerText = 'Swipped right!' //? Debug
+    }
   } else {
-    if ((startX - endX) <= minSwipeConfirm) {
+    const isSwippedLeft = (startX - endX) <= minSwipeConfirm
+    if (isSwippedLeft) {
       listElm.children[0].style.marginRight = 0
       listElm.children[2].style.marginLeft = 0
       listElm.children[1].style.marginLeft = 0
-    } else alert('Swipped left!')
+      action.innerText = 'Cancel!' //? Debug
+    } else {
+      listElm.children[0].style.margin = 0
+      listElm.children[2].style.margin = 0
+      listElm.children[1].style.margin = 0
+      action.innerText = 'Swipped left!' //? Debug
+    }
   }
   addition.innerText = 0 //? Debug
   gesture.innerText = 'idle' //? Debug
