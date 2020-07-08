@@ -13,7 +13,7 @@ for (const list of lists) {
 
   //* Touch Event
   list.ontouchstart = ({ changedTouches }) => {
-    handleStart(changedTouches[0].screenX)
+    handleStart(changedTouches[0].screenX, list)
     list.ontouchmove = ({ changedTouches }) => {
       const { screenX } = changedTouches[0]
       handleMotion(startX, screenX, list)
@@ -25,7 +25,7 @@ for (const list of lists) {
 
   //* Mouse Event
   list.onmousedown = ({ screenX }) => {
-    handleStart(screenX)
+    handleStart(screenX, list)
     list.style.cursor = 'grabbing'
     list.onmousemove = ({ screenX }) => {
       handleMotion(startX, screenX, list)
@@ -60,14 +60,22 @@ function handleStyle(listElm) {
 }
 
 // Set value of startX
-function handleStart(val) {
+function handleStart(val, listElm) {
   startX = val
+  // Reset transition on event start
+  for (const child of listElm.children) {
+    child.style.transition = 'none'
+  }
   addition.innerText = 0 //? Debug
   gesture.innerText = 'idle' //? Debug
 }
 
 // Move back element on cancel / not meet minSwipe % requirement
 function handleCancel(x, minSwipeConfirm, listElm) {
+  // Add transition on event end
+  for (const child of listElm.children) {
+    child.style.transition = 'margin .5s'
+  }
   const endX = x
   // Swipe back abortion
   if (swipeToRight(startX, endX)) {
@@ -77,8 +85,8 @@ function handleCancel(x, minSwipeConfirm, listElm) {
       listElm.children[1].style.marginLeft = 0
       action.innerText = 'Cancel!' //? Debug
     } else {
-      listElm.children[0].style.margin = '0'
-      listElm.children[1].style.margin = '0'
+      listElm.children[0].style.marginRight = '-100%'
+      listElm.children[1].style.marginLeft = '100%'
       action.innerText = 'Swipped right!' //? Debug
     }
   } else {
@@ -90,8 +98,8 @@ function handleCancel(x, minSwipeConfirm, listElm) {
       action.innerText = 'Cancel!' //? Debug
     } else {
       listElm.children[0].style.margin = 0
-      listElm.children[2].style.margin = 0
-      listElm.children[1].style.margin = 0
+      listElm.children[2].style.marginLeft = '-100%'
+      listElm.children[1].style.marginRight = '100%'
       action.innerText = 'Swipped left!' //? Debug
     }
   }
