@@ -4,8 +4,11 @@ let startX = 0
 let endX = 0
 
 for (const list of lists) {
+  //* Style
+  handleStyle(list)
+
   // Get minimal swiped percent
-  const minSwipePercent = 35 // %
+  const minSwipePercent = 40 // %
   const minSwipeConfirm = minSwipePercent * list.clientWidth / 100
 
   //* Touch Event
@@ -33,6 +36,27 @@ for (const list of lists) {
     list.style.cursor = 'grab' 
     handleCancel(screenX, minSwipeConfirm, list)
   }
+}
+
+function handleStyle(listElm) {
+  // Parent
+  listElm.style.overflow = 'hidden'
+  listElm.style.position = 'relative'
+  listElm.style.cursor = 'grab'
+  // Each child
+  for (const child of listElm.children) {
+    child.style.float = 'left'
+    child.style.width = '100%'
+  }
+  // Left action
+  listElm.children[0].style.position = 'absolute'
+  listElm.children[0].style.right = '100%'
+  listElm.children[0].style.textAlign = 'right'
+  listElm.children[0].style.boxShadow = 'inset -3px 0 5px 0px rgba(0, 0, 0, 0.2)'
+  // Right action
+  listElm.children[2].style.position = 'absolute'
+  listElm.children[2].style.left = '100%'
+  listElm.children[2].style.boxShadow = 'inset 3px 0 5px 0px rgba(0, 0, 0, 0.2)'
 }
 
 // Set value of startX
