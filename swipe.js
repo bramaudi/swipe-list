@@ -8,6 +8,7 @@ for (const list of lists) {
   const minSwipePercent = 35 // %
   const minSwipeConfirm = minSwipePercent * list.clientWidth / 100
 
+  //* Touch Event
   list.ontouchstart = ({ changedTouches }) => {
     handleStart(changedTouches[0].screenX)
     list.ontouchmove = ({ changedTouches }) => {
@@ -19,7 +20,7 @@ for (const list of lists) {
     handleCancel(changedTouches[0].screenX, minSwipeConfirm, list)
   }
 
-
+  //* Mouse Event
   list.onmousedown = ({ screenX }) => {
     handleStart(screenX)
     list.style.cursor = 'grabbing'
@@ -37,8 +38,8 @@ for (const list of lists) {
 // Set value of startX
 function handleStart(val) {
   startX = val
-  addition.innerText = 0
-  gesture.innerText = 'idle'
+  addition.innerText = 0 //? Debug
+  gesture.innerText = 'idle' //? Debug
 }
 
 // Move back element on cancel / not meet minSwipe % requirement
@@ -52,12 +53,13 @@ function handleCancel(x, minSwipeConfirm, list) {
     } else alert('Swipped right!')
   } else {
     if ((startX - endX) <= minSwipeConfirm) {
+      list.children[0].style.marginRight = 0
       list.children[2].style.marginLeft = 0
       list.children[1].style.marginLeft = 0
     } else alert('Swipped left!')
   }
-  addition.innerText = 0
-  gesture.innerText = 'idle'
+  addition.innerText = 0 //? Debug
+  gesture.innerText = 'idle' //? Debug
 }
 
 // Make element move
@@ -69,16 +71,16 @@ function handleMotion(startX, moveX, list) {
     list.children[0].style.marginRight = `-${movementX}px` // left-act
     // clear after left
     list.children[2].style.marginLeft = 0
-    gesture.innerText = 'right'
+    gesture.innerText = 'right' //? Debug
   } else {
     // move left
     list.children[1].style.marginLeft = `${movementX}px`
     list.children[2].style.marginLeft = `${movementX}px` // right-act
     // clear after right
     list.children[0].style.marginRight = 0
-    gesture.innerText = 'left'
+    gesture.innerText = 'left' //? Debug
   }
-  addition.innerText = (moveX - startX)
+  addition.innerText = (moveX - startX) //? Debug
 }
 
 // Detect swipe direction
