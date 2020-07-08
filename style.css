@@ -13,11 +13,18 @@ body {
 .list div {
   padding: 10px;
 }
-.list div:nth-child(1) {
+.list .left-act {
   padding-right: 10px;
+  background-color: dimgray;
+}
+.list .left-active {
   background-color: burlywood;
 }
-.list div:nth-child(3) {
+
+.list .right-act {
   padding-left: 10px;
+  background-color: dimgray;
+}
+.list .right-active {
   background-color: aquamarine;
 }
