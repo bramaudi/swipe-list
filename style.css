@@ -13,6 +13,7 @@ body {
   overflow: hidden;
   position: relative;
   margin: 5px 0;
+  cursor: grab;
 }
 
 .list > div {
