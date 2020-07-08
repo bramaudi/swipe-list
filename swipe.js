@@ -18,9 +18,9 @@ for (const list of lists) {
       const { screenX } = changedTouches[0]
       handleMotion(startX, screenX)
     }
-  }
-  list.ontouchend = ({ changedTouches }) => {
-    handleCancel(changedTouches[0].screenX)
+    list.ontouchend = ({ changedTouches }) => {
+      handleCancel(changedTouches[0].screenX)
+    }
   }
 
   //* Mouse Event
@@ -30,11 +30,11 @@ for (const list of lists) {
     list.onmousemove = ({ screenX }) => {
       handleMotion(startX, screenX)
     }
-  }
-  list.onmouseup = ({ screenX }) => {
-    list.onmousemove = null
-    list.style.cursor = 'grab' 
-    handleCancel(screenX)
+    list.onmouseup = ({ screenX }) => {
+      list.onmousemove = null
+      list.style.cursor = 'grab' 
+      handleCancel(screenX)
+    }
   }
 
   //* Handlers list
