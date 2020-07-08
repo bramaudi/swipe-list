@@ -67,19 +67,19 @@ function handleStart(val) {
 }
 
 // Move back element on cancel / not meet minSwipe % requirement
-function handleCancel(x, minSwipeConfirm, list) {
+function handleCancel(x, minSwipeConfirm, listElm) {
   const endX = x
   // Swipe back abortion
   if (swipeToRight(startX, endX)) {
     if ((endX - startX) <= minSwipeConfirm) {
-      list.children[0].style.marginRight = 0
-      list.children[1].style.marginLeft = 0
+      listElm.children[0].style.marginRight = 0
+      listElm.children[1].style.marginLeft = 0
     } else alert('Swipped right!')
   } else {
     if ((startX - endX) <= minSwipeConfirm) {
-      list.children[0].style.marginRight = 0
-      list.children[2].style.marginLeft = 0
-      list.children[1].style.marginLeft = 0
+      listElm.children[0].style.marginRight = 0
+      listElm.children[2].style.marginLeft = 0
+      listElm.children[1].style.marginLeft = 0
     } else alert('Swipped left!')
   }
   addition.innerText = 0 //? Debug
@@ -87,21 +87,21 @@ function handleCancel(x, minSwipeConfirm, list) {
 }
 
 // Make element move
-function handleMotion(startX, moveX, list) {
+function handleMotion(startX, moveX, listElm) {
   const movementX = moveX - startX
   if (swipeToRight(startX, moveX)) {
     // move right
-    list.children[1].style.marginLeft = `${movementX}px`
-    list.children[0].style.marginRight = `-${movementX}px` // left-act
+    listElm.children[1].style.marginLeft = `${movementX}px`
+    listElm.children[0].style.marginRight = `-${movementX}px` // left-act
     // clear after left
-    list.children[2].style.marginLeft = 0
+    listElm.children[2].style.marginLeft = 0
     gesture.innerText = 'right' //? Debug
   } else {
     // move left
-    list.children[1].style.marginLeft = `${movementX}px`
-    list.children[2].style.marginLeft = `${movementX}px` // right-act
+    listElm.children[1].style.marginLeft = `${movementX}px`
+    listElm.children[2].style.marginLeft = `${movementX}px` // right-act
     // clear after right
-    list.children[0].style.marginRight = 0
+    listElm.children[0].style.marginRight = 0
     gesture.innerText = 'left' //? Debug
   }
   addition.innerText = (moveX - startX) //? Debug
