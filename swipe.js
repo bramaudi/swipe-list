@@ -9,59 +9,79 @@ for (const list of lists) {
   const minSwipeConfirm = minSwipePercent * list.clientWidth / 100
 
   list.ontouchstart = ({ changedTouches }) => {
-    startX = changedTouches[0].screenX
-    addition.innerText = 0
-    gesture.innerText = 'idle'
-  }
-
-  list.ontouchend = ({ changedTouches }) => {
-    endX = changedTouches[0].screenX
-    // Swipe back abortion
-    if (swipeToRight(startX, endX)) {
-      if ((endX - startX) <= minSwipeConfirm) {
-        list.children[0].style.marginRight = 0
-        list.children[1].style.marginLeft = 0
-      } else alert('Swipped right!')
-    } else {
-      if ((startX - endX) <= minSwipeConfirm) {
-        list.children[2].style.marginLeft = 0
-        list.children[1].style.marginLeft = 0
-      } else alert('Swipped left!')
+    handleStart(changedTouches[0].screenX)
+    list.ontouchmove = ({ changedTouches }) => {
+      const { screenX } = changedTouches[0]
+      handleMotion(startX, screenX, list)
     }
-    addition.innerText = 0
-    gesture.innerText = 'idle'
+  }
+  list.ontouchend = ({ changedTouches }) => {
+    handleCancel(changedTouches[0].screenX, minSwipeConfirm, list)
   }
 
-  list.ontouchmove = ({ changedTouches }) => {
-    const { screenX } = changedTouches[0]
-    handleMotion(startX, screenX, list)
-    addition.innerText = (screenX - startX)
+
+  list.onmousedown = ({ screenX }) => {
+    handleStart(screenX)
+    list.style.cursor = 'grabbing'
+    list.onmousemove = ({ screenX }) => {
+      handleMotion(startX, screenX, list)
+    }
+  }
+  list.onmouseup = ({ screenX }) => {
+    list.onmousemove = null
+    list.style.cursor = 'grab' 
+    handleCancel(screenX, minSwipeConfirm, list)
   }
 }
 
+// Set value of startX
+function handleStart(val) {
+  startX = val
+  addition.innerText = 0
+  gesture.innerText = 'idle'
+}
+
+// Move back element on cancel / not meet minSwipe % requirement
+function handleCancel(x, minSwipeConfirm, list) {
+  const endX = x
+  // Swipe back abortion
+  if (swipeToRight(startX, endX)) {
+    if ((endX - startX) <= minSwipeConfirm) {
+      list.children[0].style.marginRight = 0
+      list.children[1].style.marginLeft = 0
+    } else alert('Swipped right!')
+  } else {
+    if ((startX - endX) <= minSwipeConfirm) {
+      list.children[2].style.marginLeft = 0
+      list.children[1].style.marginLeft = 0
+    } else alert('Swipped left!')
+  }
+  addition.innerText = 0
+  gesture.innerText = 'idle'
+}
+
+// Make element move
 function handleMotion(startX, moveX, list) {
   const movementX = moveX - startX
-  const leftAct = list.children[0]
-  const rightAct = list.children[2]
-  const content = list.children[1]
-
   if (swipeToRight(startX, moveX)) {
-    // moving right
-    content.style.marginLeft = `${movementX}px`
-    leftAct.style.marginRight = `-${movementX}px` // left-act
+    // move right
+    list.children[1].style.marginLeft = `${movementX}px`
+    list.children[0].style.marginRight = `-${movementX}px` // left-act
     // clear after left
-    rightAct.style.marginLeft = 0
+    list.children[2].style.marginLeft = 0
     gesture.innerText = 'right'
   } else {
-    // moving left
-    content.style.marginLeft = `${movementX}px`
-    rightAct.style.marginLeft = `${movementX}px` // right-act
+    // move left
+    list.children[1].style.marginLeft = `${movementX}px`
+    list.children[2].style.marginLeft = `${movementX}px` // right-act
     // clear after right
-    leftAct.style.marginRight = 0
+    list.children[0].style.marginRight = 0
     gesture.innerText = 'left'
   }
+  addition.innerText = (moveX - startX)
 }
 
+// Detect swipe direction
 function swipeToRight(start, end) {
   return !!(start < end)
 }
